@@ -1,0 +1,29 @@
+[project]
+name = "bulk-certificate-generator"
+version = "1.0.0"
+description = "Production-grade Bulk Certificate Generator backend API & worker system"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "sqlalchemy>=2.0.28",
+    "pydantic>=2.6.4",
+    "pydantic-settings>=2.2.1",
+    "email-validator>=2.1.1",
+    "reportlab>=4.1.0",
+    "python-multipart>=0.0.9",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q --tb=short"
+testpaths = ["tests"]
+python_files = ["test_*.py"]

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulk Certificate Generator - Glassmorphism Edition</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <!-- Ambient Glowing Glass Background Blobs -->
+  <div class="bg-glow-container">
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+    <div class="glow-blob blob-3"></div>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="glass-card">
+      <div>
+        <h1>Bulk Certificate Generator</h1>
+        <p>Production-Grade Asynchronous Certificate Engine with Fault Isolation & Verification</p>
+      </div>
+      <div class="header-links">
+        <a href="/docs" target="_blank">📄 Swagger API Docs</a>
+        <a href="/api/health" target="_blank">💚 Health Status</a>
+      </div>
+    </header>
+
+    <!-- Capabilities Overview Section ("What Can This System Do?") -->
+    <div class="glass-card capabilities-banner">
+      <div class="capabilities-title">
+        <span>🚀 What Can This System Do? (Capabilities & Features)</span>
+      </div>
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <div class="cap-icon">⚡</div>
+          <div class="cap-heading">Bulk-First Asynchronous Processing</div>
+          <div class="cap-desc">Submit thousands of recipients in a single request (JSON or CSV file). Processing runs in the background without blocking HTTP requests.</div>
+        </div>
+
+        <div class="cap-item">
+          <div class="cap-icon">🛡️</div>
+          <div class="cap-heading">Row-Level Fault Isolation</div>
+          <div class="cap-desc">A failed row or rendering error on recipient #450 never stops remaining certificates. Each certificate is rendered and committed independently.</div>
+        </div>
+
+        <div class="cap-item">
+          <div class="cap-icon">🔍</div>
+          <div class="cap-heading">Validation & Audit Error Storage</div>
+          <div class="cap-desc">Invalid inputs (malformed email, missing name, control chars) are recorded as FAILED records with exact validation reason text rather than dropping data silently.</div>
+        </div>
+
+        <div class="cap-item">
+          <div class="cap-icon">🎨</div>
+          <div class="cap-heading">ReportLab PDF Engine & Fonts</div>
+          <div class="cap-desc">Generates A4 Landscape vector PDF certificates with bundled Unicode TTF fonts (DejaVuSans) and dynamic font auto-scaling for long names.</div>
+        </div>
+
+        <div class="cap-item">
+          <div class="cap-icon">📦</div>
+          <div class="cap-heading">Deduplicated ZIP Archive Stream</div>
+          <div class="cap-desc">Package all ready PDF certificates into an in-memory ZIP archive with sanitized, deduplicated filenames (e.g. 001_John_Doe.pdf).</div>
+        </div>
+
+        <div class="cap-item">
+          <div class="cap-icon">🔒</div>
+          <div class="cap-heading">Public Authenticity Verification</div>
+          <div class="cap-desc">Unique printed verification codes (e.g. CERT-8F3A19B2) allow third parties to verify certificate authenticity instantly at <code>/api/verify/{code}</code>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Workspace Grid -->
+    <div class="grid-2col">
+      <!-- Section 1: Create Job Form -->
+      <div class="glass-card">
+        <div class="card-header-flex">
+          <div class="card-title">
+            <span>⚡ Create Certificate Batch</span>
+          </div>
+          <span style="font-size:0.8rem; color:var(--accent-gold); font-weight:600;">Fault-Tolerant Engine</span>
+        </div>
+
+        <form id="jobForm">
+          <div class="form-group">
+            <label>Course / Event Title</label>
+            <input type="text" id="title" class="form-control" placeholder="e.g. Masterclass in Scalable Systems" required value="SDE Certificate of Excellence">
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0;">
+            <div class="form-group">
+              <label>Issuer Name</label>
+              <input type="text" id="issuerName" class="form-control" placeholder="e.g. Tech Institute" required value="Global Engineering Academy">
+            </div>
+            <div class="form-group">
+              <label>Issue Date</label>
+              <input type="text" id="issueDate" class="form-control" placeholder="e.g. October 2026" required value="2026-10-08">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0;">
+            <div class="form-group">
+              <label>Signatory Name</label>
+              <input type="text" id="signatoryName" class="form-control" placeholder="e.g. Dr. Alex Vance" required value="Dr. Alex Vance">
+            </div>
+            <div class="form-group">
+              <label>Signatory Title</label>
+              <input type="text" id="signatoryTitle" class="form-control" placeholder="e.g. VP of Engineering" required value="VP of Engineering">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Recipients Upload (CSV File Drag & Drop)</label>
+            <div id="dropzone" class="dropzone">
+              <p style="font-weight:700; font-size:1.05rem;">📁 Drag & Drop CSV File Here</p>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">or click to browse file (sample_recipients.csv supported)</p>
+              <input type="file" id="csvFileInput" accept=".csv" style="display:none;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+              <label style="margin-bottom:0;">Recipients Data Preview / Paste CSV</label>
+              <button type="button" id="loadSampleBtn" class="btn btn-secondary btn-sm">✨ Load Sample CSV Data</button>
+            </div>
+            <textarea id="recipientsJsonText" class="form-control" rows="4" placeholder="Name, Email, Achievement&#10;Alice Smith, alice@example.com, High Honors&#10;Bob Jones, bad-email, System Design"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">
+            🚀 Launch Generation Batch Job
+          </button>
+        </form>
+      </div>
+
+      <!-- Section 2: Active Job Progress & Verification Check -->
+      <div>
+        <div class="glass-card" id="activeJobCard">
+          <div class="card-header-flex">
+            <div class="card-title">
+              <span>📊 Live Job Monitor</span>
+            </div>
+            <span id="jobStatusBadge" class="badge badge-pending">NO ACTIVE JOB</span>
+          </div>
+
+          <div id="noJobState">
+            <p style="color:var(--text-muted); font-size:0.92rem;">Submit a job on the left or select a recent job below to monitor progress in real time.</p>
+          </div>
+
+          <div id="jobProgressState" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <h3 id="jobTitleDisplay" style="font-size:1.15rem; color:var(--text-main);"></h3>
+                <p id="jobIdDisplay" style="font-size:0.82rem; color:var(--text-muted); font-family:monospace;"></p>
+              </div>
+              <button id="downloadZipBtn" class="btn btn-success btn-sm" style="display:none;">📦 Download All (ZIP)</button>
+            </div>
+
+            <div class="progress-container">
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:6px;">
+                <span>Generation Progress</span>
+                <span id="progressPercentText" style="font-weight:700; color:var(--primary-glow);">0%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div id="progressBarFill" class="progress-bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-box">
+                <div class="val" id="statTotal">0</div>
+                <div class="lbl">Total Rows</div>
+              </div>
+              <div class="stat-box">
+                <div class="val" id="statCompleted" style="color:var(--success);">0</div>
+                <div class="lbl">Completed</div>
+              </div>
+              <div class="stat-box">
+                <div class="val" id="statFailed" style="color:var(--danger);">0</div>
+                <div class="lbl">Failed</div>
+              </div>
+              <div class="stat-box">
+                <div class="val" id="statPending" style="color:var(--warning);">0</div>
+                <div class="lbl">Pending</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Jobs History -->
+        <div class="glass-card" style="margin-top:1.5rem;">
+          <div class="card-title" style="margin-bottom:1rem;">🕒 Recent Jobs History</div>
+          <div id="recentJobsList" style="font-size:0.9rem; color:var(--text-muted);">
+            Loading recent jobs...
+          </div>
+        </div>
+
+        <!-- Verification Quick Check -->
+        <div class="glass-card" style="margin-top:1.5rem;">
+          <div class="card-title" style="margin-bottom:0.75rem;">🔑 Public Certificate Verifier</div>
+          <div style="display:flex; gap:0.6rem;">
+            <input type="text" id="verifyCodeInput" class="form-control" placeholder="Enter code (e.g. CERT-8F3A19B2)">
+            <button id="verifyBtn" class="btn btn-secondary">Verify</button>
+          </div>
+          <div id="verifyResult" style="margin-top:0.75rem; font-size:0.88rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Job Certificates Table -->
+    <div class="glass-card" id="certificatesCard">
+      <div class="card-header-flex">
+        <div class="card-title">
+          <span>📜 Job Recipients & Generated Certificates</span>
+        </div>
+        <div style="display:flex; gap:0.6rem; align-items:center;">
+          <label style="font-size:0.82rem; color:var(--text-muted);">Status Filter:</label>
+          <select id="statusFilter" class="form-control" style="width:auto; padding:5px 12px; font-size:0.85rem;">
+            <option value="">ALL STATUS</option>
+            <option value="COMPLETED">COMPLETED</option>
+            <option value="FAILED">FAILED</option>
+            <option value="PENDING">PENDING</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="certsTable">
+          <thead>
+            <tr>
+              <th>Row</th>
+              <th>Recipient Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Verification Code</th>
+              <th>Error Details / Actions</th>
+            </tr>
+          </thead>
+          <tbody id="certsTableBody">
+            <tr>
+              <td colspan="6" style="text-align:center; color:var(--text-muted); padding:2rem;">No active job loaded yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

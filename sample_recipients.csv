@@ -1,0 +1,11 @@
+name,email,achievement
+Alice Johnson,alice.johnson@example.com,Backend System Architecture Excellence
+Bob Marley,bob.marley@example.com,Cloud Microservices Masterclass
+Invalid User Row,invalid-email-address,Failed Validation Demo Row
+Charlie Davis,charlie.davis@example.com,Database Optimization & Indexing
+Control Char Test\x07,control@example.com,Security Audit Demo
+Renée Dupont,renee.dupont@example.com,Internationalization & Unicode Font Test
+David Evans,david.evans@example.com,DevOps & CI/CD Pipelines
+Eva Green,eva.green@example.com,FastAPI Async Microservices
+Frank Wright,frank.wright@example.com,Enterprise Software Patterns
+Grace Hopper,grace.hopper@example.com,Pioneer Computer Science Award

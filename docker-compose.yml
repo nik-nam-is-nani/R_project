@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: bulk_certificate_generator
+    ports:
+      - "8000:8000"
+    volumes:
+      - storage_data:/app/storage
+    environment:
+      - DATABASE_URL=sqlite:///./storage/bulk_certificates.db
+      - STORAGE_DIR=./storage
+      - MAX_RECIPIENTS=5000
+      - BASE_URL=http://localhost:8000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  storage_data:
